@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 // material-ui
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { ButtonGroup } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,7 +24,6 @@ import Typography from '@mui/material/Typography';
 // import { CSVExport, RowSelection } from 'components/third-party/react-table';
 import "../../../CSS/loading.css"
 import "../../../CSS/copybutton.css"
-import Button from '@mui/material/Button';
 // table data
 function createData(number,address, total, profit, rate, buy,token) {
   return {
@@ -138,7 +138,7 @@ const headCells = [
     id: 'wintokens_tradedrate',
     numeric: true,
     disablePadding: false,
-    label: 'wintokens_tradedrate'
+    label: 'Rate'
   },
   // {
   //   id: 'Avg_Buy_Price',
@@ -205,6 +205,8 @@ export default function EnhancedTable() {
   const [dateItem, setDateItem] = React.useState('');
   const [viewIndex, setViewIndex] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
+
+  const [today, setToday] = React.useState([]);
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   useEffect(() => {
     const fetchDexItem = async () => {
@@ -212,7 +214,14 @@ export default function EnhancedTable() {
         setLoading(true);
         // const response = await axios.get('https://dex-backend.vercel.app/');  // Fetch the data
         const response = await axios.get('https://solana-pump-fun-wallet-tracking.vercel.app/');  // Fetch the data
-        const responseDate = await axios.get('https://dex-backend.vercel.app/date');  // Fetch the data
+        const responseDate = await axios.get('https://dex-backend.vercel.app/date');  // Fetch the dat
+        const getToday = new Date();
+        const getThreeDay = new Date(getToday); // Use getToday instead of today
+        getThreeDay.setDate(getToday.getDate() + 3);
+        
+        const getThirtyDay = new Date(getToday); // Use getToday instead of today
+        getThirtyDay.setDate(getToday.getDate() + 30);
+        setToday([getToday, getThreeDay, getThirtyDay]);
         console.log(responseDate)
         if(response.data&&responseDate.data){
           setDexItem(response.data);
@@ -228,19 +237,10 @@ export default function EnhancedTable() {
 
     fetchDexItem();  // Call the function to fetch data
   }, []);  
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelectedId = dexItem.map((n) => n.name);
-      setSelected(newSelectedId);
-      return;
-    }
-    setSelected([]);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -266,13 +266,22 @@ export default function EnhancedTable() {
       content={false}
     >
     <TableContainer>
-      <Button></Button>
+      <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+        <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
+          <Button key="one" onClick={()=>setViewIndex(0)} color={viewIndex == 0 ? "success" : "primary"}>1D</Button>
+          <Button key="two" onClick={()=>setViewIndex(1)} color={viewIndex == 1 ? "success" : "primary"}>7D</Button>
+          <Button key="three" onClick={()=>setViewIndex(2)} color={viewIndex == 2 ? "success" : "primary"}>30D</Button>
+        </ButtonGroup>
+        <Typography>
+          {today[viewIndex]?.toLocaleDateString()}
+        </Typography>
+      </Box>
+
       <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
         <EnhancedTableHead
           numSelected={selected.length}
           order={order}
           orderBy={orderBy}
-          onSelectAllClick={handleSelectAllClick}
           onRequestSort={handleRequestSort}
           rowCount={dexItem.length}
         />
@@ -300,37 +309,37 @@ export default function EnhancedTable() {
                       </Box>
                   </TableCell>
                   <TableCell align="center">
-                      {row.realized_profit[0] ? row.realized_profit[0].toFixed(2) : '0.00'}x
+                      {row.realized_profit[viewIndex] ? row.realized_profit[viewIndex].toFixed(2) : '0.00'}
                   </TableCell>
-                  <TableCell align="center" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[0] ? row.unrealized_profit[0].toFixed(2) : '0.00'}</Typography></TableCell>
+                  <TableCell align="center" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[viewIndex] ? row.unrealized_profit[viewIndex].toFixed(2) : '0.00'}</Typography></TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.combined_profit[0] ? row.combined_profit[0].toFixed(2) : '0.00'}%
+                    {row.combined_profit[viewIndex] ? row.combined_profit[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.realized_roi[0] ? row.realized_roi[0].toFixed(2) : '0.00'}%
+                    {row.realized_roi[viewIndex] ? row.realized_roi[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.unrealized_roi[0] ? row.unrealized_roi[0].toFixed(2) : '0.00'}%
+                    {row.unrealized_roi[viewIndex] ? row.unrealized_roi[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.combined_roi[0] ? row.combined_roi[0].toFixed(2) : '0.00'}%
+                    {row.combined_roi[viewIndex] ? row.combined_roi[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.winrate[0] ? row.winrate[0].toFixed(2) : '0.00'}%
+                    {row.winrate[viewIndex] ? row.winrate[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.tokens_traded[0] ? row.tokens_traded[0].toFixed(2) : '0.00'}%
+                    {row.tokens_traded[viewIndex] ? row.tokens_traded[viewIndex].toFixed(2) : '0.00'}%
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
