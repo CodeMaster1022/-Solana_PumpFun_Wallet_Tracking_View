@@ -273,13 +273,13 @@ export default function EnhancedTable() {
     <MainCard
       content={false}
     >
-      <Typography sx={{ml:3, py:'10px',fontSize:'20px',color:'gray'}}>Profit Top 200</Typography>
+      {/* <Typography sx={{ml:3, py:'10px',fontSize:'20px',color:'gray'}}>Profit Top 200</Typography>
       <Typography sx={{ml:3, display:'flex'}}>
         <Typography color={"#6D9EEB"}>Token Traded in</Typography>&nbsp;:&nbsp;
         <Typography sx={{color:"#ABE796"}}>5M</Typography>&nbsp;&nbsp;
         <Typography sx={{color:'#E7B114'}}>7D</Typography>&nbsp;
         UTC&nbsp;[&nbsp;{formatDate(dateItem[0].startTime)}&nbsp;~&nbsp;{formatDate(dateItem[0].endTime)}&nbsp;]
-      </Typography>
+      </Typography> */}
     <TableContainer>
       <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
         <EnhancedTableHead
