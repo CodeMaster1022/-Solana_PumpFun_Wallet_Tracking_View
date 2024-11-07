@@ -399,9 +399,6 @@ export default function EnhancedTable() {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
-                    <Typography fontSize={12}>{row.tokens_traded.toFixed(2) }&nbsp;&nbsp;</Typography>
-                  </TableCell>
-                  <TableCell sx={{ pr: 3}} align="center">
                     <Typography fontSize={12}>{row.average_traded_time.toFixed(2) }&nbsp;&nbsp;</Typography>
                   </TableCell>
                 </TableRow>
