@@ -26,6 +26,7 @@ import "../../../CSS/loading.css"
 import "../../../CSS/copybutton.css"
 import "../../../CSS/spinNumber.css"
 import { filter } from 'lodash';
+import { Link } from 'react-router-dom';
 // table data
 function createData(_id,wallet_address, realized_profit, unrealized_profit, combined_profit, realized_roi,unrealized_roi,combined_roi,winrate,tokens_traded) {
   return {
@@ -358,7 +359,9 @@ export default function EnhancedTable() {
                   <TableCell align="center" sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
                   <TableCell align="center" component="th" id={labelId} scope="row" padding="none">
                       <Box sx={{display:'flex', justifyContent:'left',alignItems:'center'}}>
+                      <a href={`https://gmgn.ai/sol/address/${row.wallet_address}`} target="_blank" rel="noopener noreferrer">
                         <Typography fontSize={12}>{row.wallet_address}</Typography>
+                      </a>
                       </Box>
                   </TableCell>
                   <TableCell align="center">
