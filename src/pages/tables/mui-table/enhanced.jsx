@@ -202,6 +202,7 @@ export default function EnhancedTable() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [dexItem, setDexItem] = React.useState([]);
   const [dateItem, setDateItem] = React.useState('');
+  const [viewIndex, setViewIndex] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   useEffect(() => {
@@ -273,13 +274,6 @@ export default function EnhancedTable() {
     <MainCard
       content={false}
     >
-      {/* <Typography sx={{ml:3, py:'10px',fontSize:'20px',color:'gray'}}>Profit Top 200</Typography>
-      <Typography sx={{ml:3, display:'flex'}}>
-        <Typography color={"#6D9EEB"}>Token Traded in</Typography>&nbsp;:&nbsp;
-        <Typography sx={{color:"#ABE796"}}>5M</Typography>&nbsp;&nbsp;
-        <Typography sx={{color:'#E7B114'}}>7D</Typography>&nbsp;
-        UTC&nbsp;[&nbsp;{formatDate(dateItem[0].startTime)}&nbsp;~&nbsp;{formatDate(dateItem[0].endTime)}&nbsp;]
-      </Typography> */}
     <TableContainer>
       <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
         <EnhancedTableHead
@@ -307,69 +301,16 @@ export default function EnhancedTable() {
                   key={row.id}
                   selected={isItemSelected}
                 >
-                  <TableCell align="left" width={"50px"} sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
-                  <TableCell align="left" component="th" id={labelId} scope="row" padding="none" style={{ width: '40%' }}>
-                      <Box sx={{display:'flex', justifyContent:'left',alignItems:'center'}}>
+                  <TableCell align="center" width={"50px"} sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
+                  <TableCell align="center" component="th" id={labelId} scope="row" padding="none">
+                      <Box sx={{display:'flex', justifyContent:'center',alignItems:'center'}}>
                         <Typography fontSize={12}>{row.wallet_address}</Typography>
-                        {/* <CopyOutlined onClick={() => copyToClipboard(row.Address)}/> */}
-                        {/* <button className="btn-copy" onClick={() => copyToClipboard(row.Address)}>
-                          <span
-                            data-text-end="Copied!"
-                            data-text-initial="Copy to clipboard"
-                            className="cp-tooltip"
-                          ></span>
-                          <span>
-                            <svg
-                              xmlSpace="preserve"
-                              style={{ enableBackground: 'new 0 0 512 512' }}
-                              viewBox="0 0 6.35 6.35"
-                              y="0"
-                              x="0"
-                              height="10"
-                              width="10"
-                              xmlns:xlink="http://www.w3.org/1999/xlink"
-                              version="1.1"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="cp-clipboard"
-                            >
-                              <g>
-                                <path
-                                  fill="currentColor"
-                                  d="M2.43.265c-.3 0-.548.236-.573.53h-.328a.74.74 0 0 0-.735.734v3.822a.74.74 0 0 0 .735.734H4.82a.74.74 0 0 0 .735-.734V1.529a.74.74 0 0 0-.735-.735h-.328a.58.58 0 0 0-.573-.53zm0 .529h1.49c.032 0 .049.017.049.049v.431c0 .032-.017.049-.049.049H2.43c-.032 0-.05-.017-.05-.049V.843c0-.032.018-.05.05-.05zm-.901.53h.328c.026.292.274.528.573.528h1.49a.58.58 0 0 0 .573-.529h.328a.2.2 0 0 1 .206.206v3.822a.2.2 0 0 1-.206.205H1.53a.2.2 0 0 1-.206-.205V1.529a.2.2 0 0 1 .206-.206z"
-                                ></path>
-                              </g>
-                            </svg>
-                            <svg
-                              xml:space="preserve"
-                              style={{ enableBackground: 'new 0 0 512 512' }}
-                              viewBox="0 0 24 24"
-                              y="0"
-                              x="0"
-                              height="18"
-                              width="18"
-                              xmlns:xlink="http://www.w3.org/1999/xlink"
-                              version="1.1"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="cp-check-mark"
-                            >
-                              <g>
-                                <path
-                                  data-original="#000000"
-                                  fill="currentColor"
-                                  d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"
-                                ></path>
-                              </g>
-                            </svg>
-                          </span>
-                        </button> */}
                       </Box>
                   </TableCell>
-                  <TableCell align="left">
-                      <Typography sx={{backgroundColor:'#094B0C', px:'8px', fontSize:'12px', color:'#5F9A64', display:'inline-block'}}>
+                  <TableCell align="center">
                       {row.realized_profit[0] ? row.realized_profit[0].toFixed(2) : '0.00'}x
-                      </Typography>
                   </TableCell>
-                  <TableCell align="left" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[0] ? row.unrealized_profit[0].toFixed(2) : '0.00'}</Typography></TableCell>
+                  <TableCell align="center" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[0] ? row.unrealized_profit[0].toFixed(2) : '0.00'}</Typography></TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
                     {row.combined_profit[0] ? row.combined_profit[0].toFixed(2) : '0.00'}%
@@ -401,7 +342,7 @@ export default function EnhancedTable() {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
-                  <Typography fontSize={12}>{row.Token_Traded}&nbsp;&nbsp;</Typography>
+                  <Typography fontSize={12}>{row.tokens_traded[0]}&nbsp;&nbsp;</Typography>
                       {/* <Button onClick={() => copyToClipboard(row.Address)}><Typography sx={{backgroundColor:'#141414',borderRadius:'10px',px:'2px',fontSize:'12px'}}>&nbsp;Copy&nbsp;</Typography></Button> */}
                   </TableCell>
                 </TableRow>
