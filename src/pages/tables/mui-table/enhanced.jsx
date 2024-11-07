@@ -229,7 +229,7 @@ export default function EnhancedTable() {
 };
 
   const [today, setToday] = React.useState([]);
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   useEffect(() => {
     const fetchDexItem = async () => {
       try {
@@ -251,7 +251,7 @@ export default function EnhancedTable() {
           setTemp(response.data);
           console.log(dexItem,'dex===>')
           setDateItem(responseDate.data);
-          await delay(300);
+          // await delay(300);
           setLoading(false);
         }  // Update state with the fetched data
       } catch (err) {
