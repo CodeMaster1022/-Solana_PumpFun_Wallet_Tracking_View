@@ -60,18 +60,13 @@ export default function DashboardLayout() {
         {/* <Header /> */}
         {/* {!isHorizontal ? <Drawer /> : <HorizontalBar />} */}
 
-        <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-          {/* <Toolbar sx={{ mt: isHorizontal ? 8 : 'inherit' }}>
-            <Box sx={{display:'flex', justifyContent:'right',alignItems:'flex-end',width:'100%'}}>
-              <Button sx={{color:'white'}} onClick={handleLogout}>Logout</Button>
-            </Box>
-          </Toolbar> */}
+        <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
           <Container
             maxWidth={container ? 'xl' : false}
             sx={{
               ...(container && { px: { xs: 0, sm: 2 } }),
               position: 'relative',
-              minHeight: 'calc(100vh - 110px)',
+              minHeight: 'calc(100vh - 10px)',
               display: 'flex',
               flexDirection: 'column'
             }}

@@ -32,7 +32,7 @@ export default function ThemeCustomization({ children }) {
           sm: 768,
           md: 1024,
           lg: 1266,
-          xl: 1440
+          // xl: 1440
         }
       },
       direction: themeDirection,

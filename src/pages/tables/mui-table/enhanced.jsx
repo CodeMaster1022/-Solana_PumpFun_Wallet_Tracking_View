@@ -27,15 +27,18 @@ import "../../../CSS/copybutton.css"
 import "../../../CSS/spinNumber.css"
 import { filter } from 'lodash';
 // table data
-function createData(number,address, total, profit, rate, buy,token) {
+function createData(_id,wallet_address, realized_profit, unrealized_profit, combined_profit, realized_roi,unrealized_roi,combined_roi,winrate,tokens_traded) {
   return {
-    number,
-    address,
-    total,
-    profit,
-    rate,
-    buy,
-    token
+    _id,
+    wallet_address,
+    realized_profit,
+    unrealized_profit,
+    combined_profit,
+    realized_roi,
+    unrealized_roi,
+    combined_roi,
+    winrate,
+    tokens_traded
   };
 }
 const formatDate = (dateString) => {
@@ -51,8 +54,7 @@ const formatDate = (dateString) => {
 };
 // table data
 const rows = [
-  createData(1,'Cupcake', 305, 3.7, 67, 4.3,2),
-  createData(2,'Donut', 452, 25.0, 51, 4.9,6),
+  createData('325345','325345xsdfwertwerwerwe',2, 4, 5,6,3,6,2,3),
 ];
 
 // table filter
@@ -83,8 +85,8 @@ function stableSort(array, comparator) {
 // table header
 const headCells = [
   {
-    id: 'total',
-    numeric: true,
+    id: '_id',
+    numeric: false,
     disablePadding: false,
     label: '#'
   },
@@ -110,7 +112,7 @@ const headCells = [
     id: 'combined_profit',
     numeric: true,
     disablePadding: false,
-    label: 'com_profit'
+    label: 'combined_profit'
   },
   {
     id: 'realized_roi',
@@ -128,7 +130,7 @@ const headCells = [
     id: 'combined_roi',
     numeric: true,
     disablePadding: false,
-    label: 'com_roi'
+    label: 'combined_roi'
   },
   {
     id: 'winrate',
@@ -140,14 +142,8 @@ const headCells = [
     id: 'wintokens_tradedrate',
     numeric: true,
     disablePadding: false,
-    label: 'Rate'
+    label: 'tradedrate'
   },
-  // {
-  //   id: 'Avg_Buy_Price',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'Avg buy rate'
-  // },
   {
     id: 'Token_Traded',
     numeric: true,
@@ -201,24 +197,29 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [dexItem, setDexItem] = React.useState([]);
   const [dateItem, setDateItem] = React.useState('');
   const [viewIndex, setViewIndex] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [temp, setTemp] = React.useState([]);
+  const [saveData, setSaveData] = React.useState([]);
 
   const [searchValue, setSearchValue] = React.useState('');
 
   const handleApply = () => {
-
-    const filterItems = temp.filter((value) => value.realized_roi[viewIndex] >= searchValue)
+    if(searchValue !== ''){
+      const filterItems = saveData.filter((value) => value.realized_roi >= searchValue);
+      setDexItem(filterItems);
+    } else {
+      setDexItem(saveData);
+    }
     console.log(searchValue,"value========>", filterItems)
-    setDexItem(filterItems);
+    
   }
   const handleReset = () => {
-    setDexItem(temp);
+    setDexItem(saveData);
     setSearchValue('');
   }
   const handleKeyDown = (e) => {
@@ -247,8 +248,8 @@ export default function EnhancedTable() {
         setToday([getToday.toLocaleDateString(), covertThreeDay, convertThirtyDay]);
         console.log(responseDate)
         if(response.data&&responseDate.data){
-          setDexItem(response.data);
           setTemp(response.data);
+          console.log(dexItem,'dex===>')
           setDateItem(responseDate.data);
           await delay(300);
           setLoading(false);
@@ -261,6 +262,25 @@ export default function EnhancedTable() {
 
     fetchDexItem();  // Call the function to fetch data
   }, []);  
+
+  useEffect(()=>{
+    if(temp){
+    const indexValues = temp.map(data => ({
+      _id: data._id,
+      wallet_address: data.wallet_address,
+      realized_profit: data.realized_profit[viewIndex],
+      unrealized_profit: data.unrealized_profit[viewIndex],
+      combined_profit: data.combined_profit[viewIndex],
+      realized_roi: data.realized_roi[viewIndex],
+      unrealized_roi: data.unrealized_roi[viewIndex],
+      combined_roi: data.combined_roi[viewIndex],
+      winrate: data.winrate[viewIndex],
+      tokens_traded: data.tokens_traded[viewIndex]
+  }));
+    setSaveData(indexValues);
+    setDexItem(indexValues)
+  }
+  },[viewIndex, temp])
   const handleSearchValue = (e) => {
     setSearchValue(e.target.value);
   }
@@ -292,7 +312,6 @@ export default function EnhancedTable() {
     <MainCard
       content={false}
     >
-    <TableContainer>
       <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
         <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
           <Button key="one" onClick={()=>{setViewIndex(0);handleReset();}} color={viewIndex == 0 ? "success" : "primary"}>1D</Button>
@@ -303,14 +322,15 @@ export default function EnhancedTable() {
           {today[viewIndex]}
         </Typography>
           <div class="number-control">
-          <Button onClick={handleReset}>Reset</Button>
+            <Typography color="gray">Realized_Roi&nbsp;</Typography>
+          {/* <Button onClick={handleReset}>Reset</Button> */}
           <div class="number-left"></div>
             <input type="number" onKeyDown={handleKeyDown} value={searchValue} name="number" className="number-quantity" onChange={handleSearchValue}/>
           <div class="number-right"></div> 
-          <Button onClick={handleApply} disabled={searchValue === ''}>Apply</Button>
+          <Button onClick={handleApply} disabled={searchValue === ''}>Search</Button>
           </div>
       </Box>
-
+    <TableContainer>
       <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
         <EnhancedTableHead
           numSelected={selected.length}
@@ -324,60 +344,58 @@ export default function EnhancedTable() {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               if (typeof row === 'number') return null;
-              const isItemSelected = isSelected(row.name);
+              // const isItemSelected = isSelected(row.id);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
                 <TableRow
                   hover
                   role="checkbox"
-                  aria-checked={isItemSelected}
                   tabIndex={-1}
                   key={row.id}
-                  selected={isItemSelected}
                 >
-                  <TableCell align="center" width={"50px"} sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
+                  <TableCell align="center" sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
                   <TableCell align="center" component="th" id={labelId} scope="row" padding="none">
                       <Box sx={{display:'flex', justifyContent:'left',alignItems:'center'}}>
                         <Typography fontSize={12}>{row.wallet_address}</Typography>
                       </Box>
                   </TableCell>
                   <TableCell align="center">
-                      {row.realized_profit[viewIndex] ? row.realized_profit[viewIndex].toFixed(2) : '0.00'}
+                  <Typography fontSize={12}>{row.realized_profit ? row.realized_profit.toFixed(2)  : '0.00'}</Typography>
                   </TableCell>
-                  <TableCell align="center" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[viewIndex] ? row.unrealized_profit[viewIndex].toFixed(2) : '0.00'}</Typography></TableCell>
+                  <TableCell align="center" ><Typography fontSize={12}>{row.unrealized_profit ? row.unrealized_profit.toFixed(2) : '0.00'}</Typography></TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.combined_profit[viewIndex] ? row.combined_profit[viewIndex].toFixed(2) : '0.00'}
+                    {row.combined_profit ? row.combined_profit.toFixed(2)  : '0.00'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography color='#D9A23B' fontSize={12}>
+                    {row.realized_roi ? row.realized_roi.toFixed(2)  : '0.00'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.realized_roi[viewIndex] ? row.realized_roi[viewIndex].toFixed(2) : '0.00'}
+                    {row.unrealized_roi ? row.unrealized_roi.toFixed(2)  : '0.00'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.unrealized_roi[viewIndex] ? row.unrealized_roi[viewIndex].toFixed(2) : '0.00'}
+                    {row.combined_roi ? row.combined_roi.toFixed(2)  : '0.00'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.combined_roi[viewIndex] ? row.combined_roi[viewIndex].toFixed(2) : '0.00'}
+                    {row.winrate ? row.winrate.toFixed(2)  : '0.00'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.winrate[viewIndex] ? row.winrate[viewIndex].toFixed(2) : '0.00'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography fontSize={12}>
-                    {row.tokens_traded[viewIndex] ? row.tokens_traded[viewIndex].toFixed(2) : '0.00'}
+                    {row.tokens_traded ? row.tokens_traded.toFixed(2)  : '0.00'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
-                  <Typography fontSize={12}>{row.tokens_traded[0]}&nbsp;&nbsp;</Typography>
+                  <Typography fontSize={12}>{row.tokens_traded.toFixed(2) }&nbsp;&nbsp;</Typography>
                   </TableCell>
                 </TableRow>
               );
@@ -394,7 +412,7 @@ export default function EnhancedTable() {
 
     {/* table pagination */}
     <TablePagination
-      rowsPerPageOptions={[5, 10, 25]}
+      rowsPerPageOptions={[10, 15, 25,50,100]}
       component="div"
       count={dexItem.length}
       rowsPerPage={rowsPerPage}
