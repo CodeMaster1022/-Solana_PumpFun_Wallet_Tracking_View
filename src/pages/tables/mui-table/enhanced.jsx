@@ -139,16 +139,16 @@ const headCells = [
     label: 'winrate'
   },
   {
-    id: 'wintokens_tradedrate',
-    numeric: true,
-    disablePadding: false,
-    label: 'tradedrate'
-  },
-  {
-    id: 'Token_Traded',
+    id: 'tokens_traded',
     numeric: true,
     disablePadding: false,
     label: 'Token traded'
+  },
+  {
+    id: 'average_traded_time',
+    numeric: true,
+    disablePadding: false,
+    label: 'Avg_Time'
   }
 ];
 
@@ -275,7 +275,8 @@ export default function EnhancedTable() {
       unrealized_roi: data.unrealized_roi[viewIndex],
       combined_roi: data.combined_roi[viewIndex],
       winrate: data.winrate[viewIndex],
-      tokens_traded: data.tokens_traded[viewIndex]
+      tokens_traded: data.tokens_traded[viewIndex],
+      average_traded_time: data.average_traded_time[viewIndex]
   }));
     setSaveData(indexValues);
     setDexItem(indexValues)
@@ -395,7 +396,10 @@ export default function EnhancedTable() {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
-                  <Typography fontSize={12}>{row.tokens_traded.toFixed(2) }&nbsp;&nbsp;</Typography>
+                    <Typography fontSize={12}>{row.tokens_traded.toFixed(2) }&nbsp;&nbsp;</Typography>
+                  </TableCell>
+                  <TableCell sx={{ pr: 3}} align="center">
+                    <Typography fontSize={12}>{row.average_traded_time.toFixed(2) }&nbsp;&nbsp;</Typography>
                   </TableCell>
                 </TableRow>
               );
