@@ -360,7 +360,7 @@ export default function EnhancedTable() {
                   <TableCell align="center" component="th" id={labelId} scope="row" padding="none">
                       <Box sx={{display:'flex', justifyContent:'left',alignItems:'center'}}>
                       <a href={`https://gmgn.ai/sol/address/${row.wallet_address}`} target="_blank" rel="noopener noreferrer">
-                        <Typography fontSize={12}>{row.wallet_address}</Typography>
+                        <Typography fontSize={14}>{row.wallet_address}</Typography>
                       </a>
                       </Box>
                   </TableCell>
