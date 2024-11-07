@@ -310,9 +310,9 @@ export default function EnhancedTable() {
                   <TableCell align="left" width={"50px"} sx={{padding:'0px'}}>{(page)*rowsPerPage+index+1}</TableCell>
                   <TableCell align="left" component="th" id={labelId} scope="row" padding="none" style={{ width: '40%' }}>
                       <Box sx={{display:'flex', justifyContent:'left',alignItems:'center'}}>
-                        <Typography fontSize={12}>{row.Address}</Typography>
+                        <Typography fontSize={12}>{row.wallet_address}</Typography>
                         {/* <CopyOutlined onClick={() => copyToClipboard(row.Address)}/> */}
-                        <button className="btn-copy" onClick={() => copyToClipboard(row.Address)}>
+                        {/* <button className="btn-copy" onClick={() => copyToClipboard(row.Address)}>
                           <span
                             data-text-end="Copied!"
                             data-text-initial="Copy to clipboard"
@@ -361,27 +361,45 @@ export default function EnhancedTable() {
                               </g>
                             </svg>
                           </span>
-                        </button>
+                        </button> */}
                       </Box>
                   </TableCell>
                   <TableCell align="left">
                       <Typography sx={{backgroundColor:'#094B0C', px:'8px', fontSize:'12px', color:'#5F9A64', display:'inline-block'}}>
-                      {row.Total_PNL ? row.Total_PNL.toFixed(2) : '0.00'}x
+                      {row.realized_profit[0] ? row.realized_profit[0].toFixed(2) : '0.00'}x
                       </Typography>
                   </TableCell>
-                  <TableCell align="left" ><Typography color='#D9A23B' fontSize={12}>{row.Total_Profit ? row.Total_Profit.toFixed(2) : '0.00'}</Typography></TableCell>
+                  <TableCell align="left" ><Typography color='#D9A23B' fontSize={12}>{row.unrealized_profit[0] ? row.unrealized_profit[0].toFixed(2) : '0.00'}</Typography></TableCell>
                   <TableCell align="center">
                     <Typography fontSize={12}>
-                    {row.Win_Rate ? row.Win_Rate.toFixed(2) : '0.00'}%
+                    {row.combined_profit[0] ? row.combined_profit[0].toFixed(2) : '0.00'}%
                     </Typography>
-                    <Box sx={{display:'flex',justifyContent:'center',gap:'5px'}}>
-                        <Typography fontSize={9}>Win&nbsp;:&nbsp;{row.Token_win_traded}</Typography>
-                        <Typography fontSize={9}>Lose&nbsp;:&nbsp;{row.Token_Traded-row.Token_win_traded}</Typography>
-                    </Box>
                   </TableCell>
-                  {/* <TableCell sx={{ pr: 3 }} align="center"> */}
-                  {/* <Typography fontSize={12}>{row.Avg_Buy_Price ? row.Avg_Buy_Price.toFixed(2) : '0.00'}</Typography> */}
-                  {/* </TableCell> */}
+                  <TableCell align="center">
+                    <Typography fontSize={12}>
+                    {row.realized_roi[0] ? row.realized_roi[0].toFixed(2) : '0.00'}%
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography fontSize={12}>
+                    {row.unrealized_roi[0] ? row.unrealized_roi[0].toFixed(2) : '0.00'}%
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography fontSize={12}>
+                    {row.combined_roi[0] ? row.combined_roi[0].toFixed(2) : '0.00'}%
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography fontSize={12}>
+                    {row.winrate[0] ? row.winrate[0].toFixed(2) : '0.00'}%
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography fontSize={12}>
+                    {row.tokens_traded[0] ? row.tokens_traded[0].toFixed(2) : '0.00'}%
+                    </Typography>
+                  </TableCell>
                   <TableCell sx={{ pr: 3}} align="center">
                   <Typography fontSize={12}>{row.Token_Traded}&nbsp;&nbsp;</Typography>
                       {/* <Button onClick={() => copyToClipboard(row.Address)}><Typography sx={{backgroundColor:'#141414',borderRadius:'10px',px:'2px',fontSize:'12px'}}>&nbsp;Copy&nbsp;</Typography></Button> */}
