@@ -23,6 +23,7 @@ import Typography from '@mui/material/Typography';
 // import { CSVExport, RowSelection } from 'components/third-party/react-table';
 import "../../../CSS/loading.css"
 import "../../../CSS/copybutton.css"
+import Button from '@mui/material/Button';
 // table data
 function createData(number,address, total, profit, rate, buy,token) {
   return {
@@ -227,22 +228,12 @@ export default function EnhancedTable() {
 
     fetchDexItem();  // Call the function to fetch data
   }, []);  
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  const copyToClipboard = (text) => {  
-    navigator.clipboard.writeText(text)  
-        .then(() => {  
-          // toast.success('Copied successfully!', { autoClose: 1000 });
-            console.log('Address copied to clipboard:', text);  
-            // Optionally, you can show a notification here  
-        })  
-        .catch(err => {  
-            console.error('Failed to copy: ', err);  
-        });  
-};  
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelectedId = dexItem.map((n) => n.name);
@@ -275,6 +266,7 @@ export default function EnhancedTable() {
       content={false}
     >
     <TableContainer>
+      <Button></Button>
       <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
         <EnhancedTableHead
           numSelected={selected.length}
