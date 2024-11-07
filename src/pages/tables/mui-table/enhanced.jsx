@@ -86,28 +86,58 @@ const headCells = [
     label: '#'
   },
   {
-    id: 'Address',
+    id: 'wallet_address',
     numeric: false,
     disablePadding: true,
-    label: 'Address'
+    label: 'wallet_address'
   },
   {
-    id: 'Total_PNL',
+    id: 'realized_profit',
     numeric: true,
     disablePadding: false,
-    label: 'Total ROI'
+    label: 'realized_profit'
   },
   {
-    id: 'Total_Profit',
+    id: 'unrealized_profit',
     numeric: true,
     disablePadding: false,
-    label: 'Total Profit'
+    label: 'unrealized_profit'
   },
   {
-    id: 'Win_Rate',
+    id: 'combined_profit',
     numeric: true,
     disablePadding: false,
-    label: 'Win Rate'
+    label: 'combined_profit'
+  },
+  {
+    id: 'realized_roi',
+    numeric: true,
+    disablePadding: false,
+    label: 'realized_roi'
+  },
+  {
+    id: 'unrealized_roi',
+    numeric: true,
+    disablePadding: false,
+    label: 'unrealized_roi'
+  },
+  {
+    id: 'combined_roi',
+    numeric: true,
+    disablePadding: false,
+    label: 'combined_roi'
+  },
+  {
+    id: 'winrate',
+    numeric: true,
+    disablePadding: false,
+    label: 'winrate'
+  },
+  {
+    id: 'wintokens_tradedrate',
+    numeric: true,
+    disablePadding: false,
+    label: 'wintokens_tradedrate'
   },
   // {
   //   id: 'Avg_Buy_Price',
@@ -179,7 +209,7 @@ export default function EnhancedTable() {
       try {
         setLoading(true);
         // const response = await axios.get('https://dex-backend.vercel.app/');  // Fetch the data
-        const response = await axios.get('https://dex-backend.vercel.app/');  // Fetch the data
+        const response = await axios.get('https://solana-pump-fun-wallet-tracking.vercel.app/');  // Fetch the data
         const responseDate = await axios.get('https://dex-backend.vercel.app/date');  // Fetch the data
         console.log(responseDate)
         if(response.data&&responseDate.data){
@@ -246,7 +276,6 @@ export default function EnhancedTable() {
       <Typography sx={{ml:3, py:'10px',fontSize:'20px',color:'gray'}}>Profit Top 200</Typography>
       <Typography sx={{ml:3, display:'flex'}}>
         <Typography color={"#6D9EEB"}>Token Traded in</Typography>&nbsp;:&nbsp;
-        {/* <Typography sx={{color:'#ABE796'}}>MC</Typography>&nbsp;&nbsp; */}
         <Typography sx={{color:"#ABE796"}}>5M</Typography>&nbsp;&nbsp;
         <Typography sx={{color:'#E7B114'}}>7D</Typography>&nbsp;
         UTC&nbsp;[&nbsp;{formatDate(dateItem[0].startTime)}&nbsp;~&nbsp;{formatDate(dateItem[0].endTime)}&nbsp;]
