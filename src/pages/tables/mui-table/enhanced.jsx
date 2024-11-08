@@ -202,6 +202,7 @@ export default function EnhancedTable() {
   const [selectedValue, setSelectedValue] = React.useState([]);
   const [dexItem, setDexItem] = React.useState([]);
   const [dateItem, setDateItem] = React.useState('');
+  const [itemIndex, setItemIndex] = React.useState('1D')
   const [viewIndex, setViewIndex] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [temp, setTemp] = React.useState([]);
@@ -249,6 +250,7 @@ export default function EnhancedTable() {
         setToday([getToday.toLocaleDateString(), covertThreeDay, convertThirtyDay]);
         console.log(responseDate)
         if(response.data&&responseDate.data){
+          console.log(response.data)
           setTemp(response.data);
           console.log(dexItem,'dex===>')
           setDateItem(responseDate.data);
@@ -269,16 +271,17 @@ export default function EnhancedTable() {
     const indexValues = temp.map(data => ({
       _id: data._id,
       wallet_address: data.wallet_address,
-      realized_profit: data.realized_profit[viewIndex],
-      unrealized_profit: data.unrealized_profit[viewIndex],
-      combined_profit: data.combined_profit[viewIndex],
-      realized_roi: data.realized_roi[viewIndex],
-      unrealized_roi: data.unrealized_roi[viewIndex],
-      combined_roi: data.combined_roi[viewIndex],
-      winrate: data.winrate[viewIndex],
-      tokens_traded: data.tokens_traded[viewIndex],
-      average_traded_time: data.average_traded_time[viewIndex]
+      realized_profit: data.realized_profit[viewIndex][itemIndex],
+      unrealized_profit: data.unrealized_profit[viewIndex][itemIndex],
+      combined_profit: data.combined_profit[viewIndex][itemIndex],
+      realized_roi: data.realized_roi[viewIndex][itemIndex],
+      unrealized_roi: data.unrealized_roi[viewIndex][itemIndex],
+      combined_roi: data.combined_roi[viewIndex][itemIndex],
+      winrate: data.winrate[viewIndex][itemIndex],
+      tokens_traded: data.tokens_traded[viewIndex][itemIndex],
+      average_traded_time: data.average_traded_time[viewIndex][itemIndex]
   }));
+    console.log(indexValues,'temp=======>')
     setSaveData(indexValues);
     setDexItem(indexValues)
   }
@@ -316,9 +319,9 @@ export default function EnhancedTable() {
     >
       <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
         <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
-          <Button key="one" onClick={()=>{setViewIndex(0);handleReset();}} color={viewIndex == 0 ? "success" : "primary"}>1D</Button>
-          <Button key="two" onClick={()=>{setViewIndex(1);handleReset();}} color={viewIndex == 1 ? "success" : "primary"}>7D</Button>
-          <Button key="three" onClick={()=>{setViewIndex(2);handleReset();}} color={viewIndex == 2 ? "success" : "primary"}>30D</Button>
+          <Button key="one" onClick={()=>{setViewIndex(0);handleReset();setItemIndex("1D")}} color={viewIndex == 0 ? "success" : "primary"}>1D</Button>
+          <Button key="two" onClick={()=>{setViewIndex(1);handleReset();setItemIndex("7D")}} color={viewIndex == 1 ? "success" : "primary"}>7D</Button>
+          <Button key="three" onClick={()=>{setViewIndex(2);handleReset();setItemIndex("30D")}} color={viewIndex == 2 ? "success" : "primary"}>30D</Button>
         </ButtonGroup>
         <Typography>
           {today[viewIndex]}
